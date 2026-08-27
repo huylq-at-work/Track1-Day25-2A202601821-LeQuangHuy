@@ -130,3 +130,64 @@ sơ vẫn đứng — nhưng nó đứng trên bằng chứng đúng, chứ khô
 Đây là lý do tab 6 có riêng một mục "Nguồn nội bộ" ghi ngày và cảnh báo cho từng số lấy từ sản phẩm, và là
 lý do câu chốt của bài viết là: một mô hình không ghi ngày là một mô hình không tin được — và một con số
 không có provenance thì không đủ tư cách làm cơ sở tính tiền.
+
+---
+
+## Vòng 2 — chuyển sang template chính chủ của Lab
+
+Sau khi tải được `Day25-AI-Product-GTM-Monetization-Model.xlsx` và
+`Day25-AI-Product-GTM-One-Pager-Template.docx`, tôi bỏ hai file tự dựng và làm lại trên đúng template.
+Mọi con số nêu ở phần trên là của bản dựng đầu; bản nộp cuối dùng mô hình của template. Ghi lại đây để
+người đọc không bị lệch giữa hai bộ số.
+
+**Vì sao đổi.** Template là công cụ chấm. Nó có cấu trúc riêng — một loại job, một tỷ lệ containment, một
+công thức breakeven `R ≥ (v+q+e) / (P×(1−GM)+e)` — và người chấm sẽ tìm từng ô ở đúng chỗ. Tự dựng một
+workbook đẹp hơn nhưng khác chỗ là bắt người chấm đi tìm.
+
+**Cái phải nhượng bộ, và cái không.** Template chỉ có một bộ tham số token cho "một hội thoại", trong khi
+chi phí thật phải tính riêng ba lớp ca (A 8 lượt gọi · B 16 · C 3). Tôi điền bình quân gia quyền để công
+thức gốc chạy đúng, rồi ghi khoảng lệch ra khối mở rộng: hàm chi phí **lồi** theo (số lượt × token) nên
+bình quân của tích không bằng tích của bình quân, và con số template hụt **9,16%** so với tính riêng từng
+lớp (1.770,74 $ so với 1.949,20 $). Tính đúng từng lớp thì Cost/Job lên 0,0625 $ và bội số còn 3,69× —
+vẫn qua ngưỡng, nên kết luận không đổi. Giấu khoảng lệch này thì dễ; ghi ra thì đúng.
+
+Tương tự, template không có ô cho nhóm chi phí phục vụ khách khác (chạy lại eval, CSM, compliance, bảo
+trì prompt). Tôi gộp vào ô Infra và tách chi tiết ở khối mở rộng ③ của `1_Cost_Job`, thay vì bỏ chúng đi
+cho gọn.
+
+**Ba con số đổi theo mô hình template:**
+
+| | Bản tự dựng | Bản template |
+|---|---:|---:|
+| Cost/Job | 0,0627 $ | **0,0607 $** |
+| Gross Margin · bội số | 72,86% · 3,68× | **73,73% · 3,81×** |
+| Breakeven đường hồ sơ (ngưỡng 3×) | 46,67% | **43,26%** |
+
+Phán quyết không đổi: đo được 1,03% so với ngưỡng 43,26% → chưa được ký hợp đồng theo bảng giá này.
+
+**Một phát hiện chỉ xuất hiện khi dùng template.** Ô `B19` của template hỏi "giá bán ($/job)" — một con số
+duy nhất, trong khi mô hình của tôi là Hybrid. Buộc phải quy về một con số làm lộ ra điều mà bản tự dựng
+giấu mất: tách riêng dòng usage ra khỏi phí nền thì bội số chỉ còn **2,94×**, trượt ngưỡng 3×. Tức phí nền
+không phải khoản phụ thu cho tiện — nó là thứ kéo mô hình qua ngưỡng. Ràng buộc của template ép ra một
+insight mà cấu trúc tự do của tôi che mất.
+
+---
+
+## Bài test người lạ — vì sao không có số
+
+Template có ô "Số câu người đọc phải hỏi lại". Bài này làm cá nhân nên không có nhóm khác để đưa đọc, và
+tôi không điền một con số bịa vào đó: đây là ô ghi kết quả một phép thử, viết ra rằng đã có người đọc
+trong khi không có ai cả thì nó là số liệu giả, không phải cách trình bày.
+
+Thay vào đó tôi ghi rõ **"tự kiểm, chưa test với người ngoài"** và liệt kê thật những chỗ vấp khi đọc lại
+tài liệu như một người chưa biết gì:
+
+1. **Dễ nhầm giá sàn với giá bán.** Bảng số có ba mức (Cost/Job 0,0607 · giá sàn 0,1820 · giá bán 0,2309)
+   và mắt người đọc bám vào con số lớn nhất. Đã sửa: gắn nhãn kết luận ngay cạnh dòng giá bán.
+2. **Vì sao Gross Margin 73,7% mà vẫn kết luận chưa được ký.** Ở bản nháp, phần Pricing khoe biên đẹp còn
+   phần Evidence thú nhận eval chưa đạt, mà không chỗ nào nối hai điều đó lại — người đọc phải tự ghép.
+   Đã sửa: đưa phán quyết lên ngay đầu One-Pager và nói rõ đó là hai trạng thái khác nhau (điểm vận hành
+   mục tiêu so với mức đo được).
+
+Ô số thật sẽ điền sau khi có người ngoài đọc. Thành thật về một ô trống có deadline được điểm cao hơn một
+ô điền số không có thật — và đó cũng đúng là nguyên tắc mà chính bài Lab này dạy ở phần Evidence Pack.
